@@ -1,4 +1,4 @@
-use std::{fs, io::Error};
+use std::fs;
 
 pub fn read_file(location: &str) -> String {
     
