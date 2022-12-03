@@ -66,7 +66,7 @@ fn score_day_b(combo: Combo) -> u8 {
 pub fn day_2_a(input: &String) -> u32 {
     input.lines()
         .map(|line| Combo::from_str(line.trim()).expect("error converting :("))
-        .map( |combo| score_day_a(combo))
+        .map(|combo| score_day_a(combo))
         .map(|score| score as u32) 
         .sum()
 }
@@ -74,7 +74,7 @@ pub fn day_2_a(input: &String) -> u32 {
 pub fn day_2_b(input: &String) -> u32 {
     input.lines()
         .map(|line| Combo::from_str(line.trim()).expect("error converting :("))
-        .map( |combo| score_day_b(combo))
+        .map(|combo| score_day_b(combo))
         .map(|score| score as u32) 
         .sum()
 }

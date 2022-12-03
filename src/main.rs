@@ -2,15 +2,30 @@ use std::fs;
 
 use days::day1;
 use days::day2;
+use days::day3::day_3_a;
+
+use crate::days::day3::day_3_b;
 
 pub mod tools;
 pub mod days;
 
 fn main() {
     //day1();
-    day2();
+    //day2();
+    day3();
 }
 
+#[allow(dead_code)]
+fn day3() {
+    let input = fs::read_to_string("res/day3").expect("could not read day3");
+    let day3 = day_3_a(&input);
+    println!("Day 3 a: {day3}");
+
+    let day3 = day_3_b(&input);
+    println!("Day 3 b: {day3}")
+}
+
+#[allow(dead_code)]
 fn day2() {
     let input = fs::read_to_string("res/day2").expect("could not read day2");
     let day2 = day2::day_2_a(&input);
@@ -21,6 +36,7 @@ fn day2() {
 
 }
 
+#[allow(dead_code)]
 fn day1() {
     let day1input = fs::read_to_string("res/day1").expect("Could not read file :(");
     let day1a = day1::day_1_a(&day1input, 1)[0];
