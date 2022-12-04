@@ -5,6 +5,8 @@ use days::day2;
 use days::day3::day_3_a;
 
 use crate::days::day3::day_3_b;
+use crate::days::day4::day_4_a;
+use crate::days::day4::day_4_b;
 
 pub mod tools;
 pub mod days;
@@ -12,7 +14,18 @@ pub mod days;
 fn main() {
     //day1();
     //day2();
-    day3();
+    //day3();
+    day4();
+}
+
+#[allow(dead_code)]
+fn day4() {
+    let input = fs::read_to_string("res/day4").expect("could not read day4");
+    let day4 = day_4_a(&input);
+    println!("Day 4 a: {day4}");
+
+    let day4 = day_4_b(&input);
+    println!("Day 4 b: {day4}");
 }
 
 #[allow(dead_code)]
