@@ -76,9 +76,9 @@ pub fn day_3_b(input: &String) -> u32 {
             .map(|s| s.to_string())
             .reduce(|acc, curr| acc.chars().filter(|char| curr.contains(*char)).collect())
             .expect("no common items? ");
-        println!("Common items: {common_items}");
+        //println!("Common items: {common_items}");
 
-        //Keep uniques
+        //Keep uniques - aka the first item :>
         let unique = common_items
             .chars()
             .next()

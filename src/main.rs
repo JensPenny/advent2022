@@ -15,7 +15,18 @@ fn main() {
     //day1();
     //day2();
     //day3();
-    day4();
+    //day4();
+    day5();
+}
+
+#[allow(dead_code)]
+fn day5() {
+    let input = fs::read_to_string("res/day5").expect("could not read day5");
+    let day = "";
+    println!("Day 5 a: {day}");
+
+    let day = "";
+    println!("Day 5 b: {day}");
 }
 
 #[allow(dead_code)]
