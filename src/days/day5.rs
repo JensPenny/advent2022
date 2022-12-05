@@ -1,6 +1,6 @@
-use std::{result, str::Lines};
+use std::collections::VecDeque;
 
-use itertools::{Chunk, Itertools};
+use itertools::Itertools;
 use regex::Regex;
 
 #[derive(Debug, PartialEq)]
@@ -10,8 +10,7 @@ struct Command {
     to: usize,
 }
 
-fn day_5_a(input: &String) -> Vec<char> {
-    let mut result: Vec<char> = vec![];
+pub fn day_5_a(input: &String) -> String {
 
     let lines = &mut input.lines();
     let empty_index = lines
@@ -27,39 +26,56 @@ fn day_5_a(input: &String) -> Vec<char> {
     let stack_input = input_string.join("\n"); //Why do this you say? because I suck at rust. Any questions?
     let mut stacks = parse_stacks(&stack_input);
 
-    let command_string = &input.lines().dropping(empty_index.0).map( |s| s.to_string()).collect_vec();
+    let command_string = &input
+        .lines()
+        .dropping(empty_index.0)
+        .map(|s| s.to_string())
+        .collect_vec();
     let command_input = command_string.join("\n");
     let commands = parse_commands(&command_input);
 
     let res = do_day_a(&mut stacks, commands);
 
-    result
+    res
 }
 
-fn do_day_a(stacks: &mut Vec<Vec<char>>, commands: Vec<Command>) -> String {
+fn do_day_a(stacks: &mut Vec<VecDeque<char>>, commands: Vec<Command>) -> String {
     for command in commands {
-        let from_stack = stacks.get_mut(command.from - 1).expect("could not get from-stack");
-        let to_stack = stacks.get_mut(command.to - 1).expect("could not get to-stack");
-        for i in 1..(command.stack_to_move) {
-            let to_move = from_stack.remove(0);
-            to_stack.insert(0, to_move);
+        let mut holder: VecDeque<char> = VecDeque::new();
+
+        for stack in stacks.iter_mut().enumerate() {
+            if stack.0 == command.from -1 {
+                for _n in 0..(command.stack_to_move) {
+                    holder.push_back(stack.1.pop_front().expect("cant pop"));
+                }
+            }
+        }
+
+        for stack in stacks.iter_mut().enumerate() {
+            if stack.0 == command.to - 1{
+                for held in holder.iter() {
+                    stack.1.push_front(*held);
+                }
+            }
         }
     }
 
-    "".to_string()
+    let mut result = String::from("");
+    stacks.iter_mut().for_each(|dequeu| result.push(dequeu.pop_front().expect("cant pop 2")));
+    result.to_string()
 }
 
-fn parse_stacks(input: &String) -> Vec<Vec<char>> {
+fn parse_stacks(input: &String) -> Vec<VecDeque<char>> {
     let lines: Vec<String> = input.lines().map(|l| l.to_string()).collect_vec();
 
-    let mut result: Vec<Vec<char>> = Vec::new();
+    let mut result: Vec<VecDeque<char>> = Vec::new();
 
     for line in lines {
         let chunks = line.chars().into_iter().chunks(4);
 
         for (index, mut chunk) in chunks.into_iter().enumerate() {
             if result.len() < index + 1 {
-                result.push(Vec::new())
+                result.push(VecDeque::new())
             }
 
             let current = result
@@ -68,7 +84,7 @@ fn parse_stacks(input: &String) -> Vec<Vec<char>> {
 
             let element = chunk.find_position(|ch| ch.is_alphabetic());
             match element {
-                Some((_, char)) => current.push(char),
+                Some((_, char)) => current.push_back(char),
                 None => (), //noop
             }
         }
@@ -104,7 +120,7 @@ fn parse_commands(input: &String) -> Vec<Command> {
 
 #[cfg(test)]
 mod tests {
-    use super::parse_stacks;
+    use super::{parse_stacks, day_5_a};
     use crate::days::day5::{parse_commands, Command};
     use itertools::Itertools;
 
@@ -119,6 +135,14 @@ move 3 from 1 to 3
 move 2 from 2 to 1
 move 1 from 1 to 2"
             .to_string()
+    }
+
+    #[test]
+    fn test_day_a(){
+        let input = input();
+        let result = day_5_a(&input);
+
+        assert_eq!(result, "CMZ");
     }
 
     #[test]
@@ -142,7 +166,6 @@ move 1 from 1 to 2"
         assert_eq!(*stacks.get(0).expect("no 1st stack"), vec!['N', 'Z']);
         assert_eq!(*stacks.get(1).expect("no 2nd stack"), vec!['D', 'C', 'M']);
         assert_eq!(*stacks.get(2).expect("no 3rd stack"), vec!['P']);
-
     }
 
     #[test]
