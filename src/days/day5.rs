@@ -11,7 +11,6 @@ struct Command {
 }
 
 pub fn day_5_a(input: &String) -> String {
-
     let lines = &mut input.lines();
     let empty_index = lines
         .find_position(|line| line.is_empty())
@@ -39,20 +38,50 @@ pub fn day_5_a(input: &String) -> String {
     res
 }
 
-fn do_day_a(stacks: &mut Vec<VecDeque<char>>, commands: Vec<Command>) -> String {
+//A lot of copy pasting, but mostly because I'm tired and don't want to refactor.
+pub fn day_5_b(input: &String) -> String {
+    let lines = &mut input.lines();
+    let empty_index = lines
+        .find_position(|line| line.is_empty())
+        .expect("no empty line in the export");
+
+    let input_string = &input
+        .lines()
+        .take(empty_index.0)
+        .map(|s| s.to_string())
+        .collect_vec();
+
+    let stack_input = input_string.join("\n"); //Why do this you say? because I suck at rust. Any questions?
+    let mut stacks = parse_stacks(&stack_input);
+
+    let command_string = &input
+        .lines()
+        .dropping(empty_index.0)
+        .map(|s| s.to_string())
+        .collect_vec();
+    let command_input = command_string.join("\n");
+    let commands = parse_commands(&command_input);
+
+    let res = do_day_b(&mut stacks, commands);
+
+    res
+}
+
+//More copy pasting, it's not illegal, so sue me!!.. (pls don't)
+fn do_day_b(stacks: &mut Vec<VecDeque<char>>, commands: Vec<Command>) -> String {
     for command in commands {
         let mut holder: VecDeque<char> = VecDeque::new();
 
         for stack in stacks.iter_mut().enumerate() {
-            if stack.0 == command.from -1 {
+            if stack.0 == command.from - 1 {
                 for _n in 0..(command.stack_to_move) {
-                    holder.push_back(stack.1.pop_front().expect("cant pop"));
+                    holder.push_front(stack.1.pop_front().expect("cant pop"));
                 }
             }
         }
 
         for stack in stacks.iter_mut().enumerate() {
-            if stack.0 == command.to - 1{
+            if stack.0 == command.to - 1 {
                 for held in holder.iter() {
                     stack.1.push_front(*held);
                 }
@@ -61,7 +90,37 @@ fn do_day_a(stacks: &mut Vec<VecDeque<char>>, commands: Vec<Command>) -> String 
     }
 
     let mut result = String::from("");
-    stacks.iter_mut().for_each(|dequeu| result.push(dequeu.pop_front().expect("cant pop 2")));
+    stacks
+        .iter_mut()
+        .for_each(|dequeu| result.push(dequeu.pop_front().expect("cant pop 2")));
+    result.to_string()
+}
+
+fn do_day_a(stacks: &mut Vec<VecDeque<char>>, commands: Vec<Command>) -> String {
+    for command in commands {
+        let mut holder: VecDeque<char> = VecDeque::new();
+
+        for stack in stacks.iter_mut().enumerate() {
+            if stack.0 == command.from - 1 {
+                for _n in 0..(command.stack_to_move) {
+                    holder.push_back(stack.1.pop_front().expect("cant pop"));
+                }
+            }
+        }
+
+        for stack in stacks.iter_mut().enumerate() {
+            if stack.0 == command.to - 1 {
+                for held in holder.iter() {
+                    stack.1.push_front(*held);
+                }
+            }
+        }
+    }
+
+    let mut result = String::from("");
+    stacks
+        .iter_mut()
+        .for_each(|dequeu| result.push(dequeu.pop_front().expect("cant pop 2")));
     result.to_string()
 }
 
@@ -120,8 +179,8 @@ fn parse_commands(input: &String) -> Vec<Command> {
 
 #[cfg(test)]
 mod tests {
-    use super::{parse_stacks, day_5_a};
-    use crate::days::day5::{parse_commands, Command};
+    use super::{day_5_a, parse_stacks};
+    use crate::days::day5::{parse_commands, Command, day_5_b};
     use itertools::Itertools;
 
     fn input() -> String {
@@ -138,7 +197,15 @@ move 1 from 1 to 2"
     }
 
     #[test]
-    fn test_day_a(){
+    fn test_day_b() {
+        let input = input();
+        let result = day_5_b(&input);
+
+        assert_eq!(result, "MCD");
+    }
+
+    #[test]
+    fn test_day_a() {
         let input = input();
         let result = day_5_a(&input);
 

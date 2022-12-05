@@ -8,6 +8,7 @@ use crate::days::day3::day_3_b;
 use crate::days::day4::day_4_a;
 use crate::days::day4::day_4_b;
 use crate::days::day5::day_5_a;
+use crate::days::day5::day_5_b;
 
 pub mod tools;
 pub mod days;
@@ -26,7 +27,7 @@ fn day5() {
     let day = day_5_a(&input);
     println!("Day 5 a: {day}");
 
-    let day = "";
+    let day = day_5_b(&input);
     println!("Day 5 b: {day}");
 }
 
