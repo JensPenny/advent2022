@@ -38,6 +38,34 @@ pub fn day_5_a(input: &String) -> String {
     res
 }
 
+fn do_day_a(stacks: &mut Vec<VecDeque<char>>, commands: Vec<Command>) -> String {
+    for command in commands {
+        let mut holder: VecDeque<char> = VecDeque::new();
+
+        for stack in stacks.iter_mut().enumerate() {
+            if stack.0 == command.from - 1 {
+                for _n in 0..(command.stack_to_move) {
+                    holder.push_back(stack.1.pop_front().expect("cant pop"));
+                }
+            }
+        }
+
+        for stack in stacks.iter_mut().enumerate() {
+            if stack.0 == command.to - 1 {
+                for held in holder.iter() {
+                    stack.1.push_front(*held);
+                }
+            }
+        }
+    }
+
+    let mut result = String::from("");
+    stacks
+        .iter_mut()
+        .for_each(|dequeu| result.push(dequeu.pop_front().expect("cant pop 2")));
+    result.to_string()
+}
+
 //A lot of copy pasting, but mostly because I'm tired and don't want to refactor.
 pub fn day_5_b(input: &String) -> String {
     let lines = &mut input.lines();
@@ -76,34 +104,6 @@ fn do_day_b(stacks: &mut Vec<VecDeque<char>>, commands: Vec<Command>) -> String 
             if stack.0 == command.from - 1 {
                 for _n in 0..(command.stack_to_move) {
                     holder.push_front(stack.1.pop_front().expect("cant pop"));
-                }
-            }
-        }
-
-        for stack in stacks.iter_mut().enumerate() {
-            if stack.0 == command.to - 1 {
-                for held in holder.iter() {
-                    stack.1.push_front(*held);
-                }
-            }
-        }
-    }
-
-    let mut result = String::from("");
-    stacks
-        .iter_mut()
-        .for_each(|dequeu| result.push(dequeu.pop_front().expect("cant pop 2")));
-    result.to_string()
-}
-
-fn do_day_a(stacks: &mut Vec<VecDeque<char>>, commands: Vec<Command>) -> String {
-    for command in commands {
-        let mut holder: VecDeque<char> = VecDeque::new();
-
-        for stack in stacks.iter_mut().enumerate() {
-            if stack.0 == command.from - 1 {
-                for _n in 0..(command.stack_to_move) {
-                    holder.push_back(stack.1.pop_front().expect("cant pop"));
                 }
             }
         }
