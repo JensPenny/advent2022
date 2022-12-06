@@ -9,7 +9,7 @@ use crate::days::day4::day_4_a;
 use crate::days::day4::day_4_b;
 use crate::days::day5::day_5_a;
 use crate::days::day5::day_5_b;
-use crate::days::day6::day_6_a;
+use crate::days::day6::day_6;
 
 pub mod tools;
 pub mod days;
@@ -26,11 +26,11 @@ fn main() {
 #[allow(dead_code)]
 fn day6() {
     let input = fs::read_to_string("res/day6").expect("could not read day6");
-    let day = day_6_a(&input);
+    let day = day_6(&input, 4);
     println!("Day 6 a: {day}");
 
-    //let day = day_6_b(&input);
-    //println!("Day 6 b: {day}");
+    let day = day_6(&input, 14);
+    println!("Day 6 b: {day}");
 }
 
 #[allow(dead_code)]
