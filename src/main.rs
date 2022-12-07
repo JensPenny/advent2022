@@ -1,4 +1,5 @@
 use std::fs;
+use std::time::Instant;
 
 use days::day1;
 use days::day2;
@@ -15,12 +16,22 @@ pub mod tools;
 pub mod days;
 
 fn main() {
+    let start = Instant::now();
     //day1();
     //day2();
     //day3();
     //day4();
     //day5();
-    day6();
+    //day6();
+    day7();
+
+    let duration = start.elapsed();
+    println!("solved in: {:?}", duration);
+}
+
+#[allow(dead_code)]
+fn day7() {
+
 }
 
 #[allow(dead_code)]
