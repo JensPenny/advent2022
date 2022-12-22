@@ -45,7 +45,7 @@ fn day8() {
 
 #[allow(dead_code)]
 fn day7() {
-
+    //lol no. Leave me alone, trees in rust
 }
 
 #[allow(dead_code)]
