@@ -11,6 +11,8 @@ use crate::days::day4::day_4_b;
 use crate::days::day5::day_5_a;
 use crate::days::day5::day_5_b;
 use crate::days::day6::day_6;
+use crate::days::day8::day_8_a;
+use crate::days::day8::day_8_b;
 
 pub mod tools;
 pub mod days;
@@ -23,10 +25,22 @@ fn main() {
     //day4();
     //day5();
     //day6();
-    day7();
+    //day7();
+    day8();
 
     let duration = start.elapsed();
     println!("solved in: {:?}", duration);
+}
+
+#[allow(dead_code)]
+fn day8() {
+    let input = fs::read_to_string("res/day8").expect("could not read day8");
+    let day = day_8_a(&input);
+    println!("Day 8 a: {day}");
+
+    let day = day_8_b(&input);
+    println!("Day 8 b: {day}");
+
 }
 
 #[allow(dead_code)]
