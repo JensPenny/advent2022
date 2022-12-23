@@ -70,24 +70,45 @@ impl Pos {
 
 pub fn day_9_a(input: &String) -> usize {
     let moves = parse(&input);
-    let visits = do_moves(&moves);
+    let visits = do_moves(&moves, 2);
 
     visits.len()
 }
 
-fn do_moves(moves: &Vec<Move>) -> HashSet<Pos> {
-    let mut head = Pos { x: 0, y: 0 };
-    let mut tail = Pos { x: 0, y: 0 };
+pub fn day_9_b(input: &String) -> usize {
+    let moves = parse(&input);
+    let visits = do_moves(&moves, 10);
+
+    visits.len()
+}
+
+fn do_moves(moves: &Vec<Move>, knots_to_make: u8) -> HashSet<Pos> {
+    let mut knots: Vec<Pos> = Vec::new();
+    for _ in 0..knots_to_make {
+        knots.push(Pos { x: 0, y: 0 });
+    }
 
     let mut visited: HashSet<Pos> = HashSet::new();
-    visited.insert(tail);
+    visited.insert(knots[knots.len() - 1]);
 
     for mv in moves {
         for _ in 0..mv.amount {
+            let mut head = knots[0];
             head.do_single_move(&mv.direction);
-            tail.move_toward(&head);
-            visited.insert(tail); //implicit copy is a bit unintuitive imo :(
-            println!("H: {:#?} | T: {:#?}", head, tail);
+            knots[0] = head;
+
+            //Move the rest of the knots
+            for knot_index in 1..knots.len() {
+                let former = knots[knot_index - 1];
+                let mut tail = knots[knot_index];
+                tail.move_toward(&former);
+                knots[knot_index] = tail;
+
+                if knot_index == (knots.len() - 1) {
+                    visited.insert(tail); //implicit copy is a bit unintuitive imo :(
+                    println!("H: {:#?} | T: {:#?}", former, tail);
+                }
+            }
         }
     }
 
@@ -146,11 +167,41 @@ R 2"
     }
 
     #[test]
-    fn do_moves_test() {
+    fn test_day_a() {
         let input = input();
         let moves = parse(&input);
 
-        let visits = do_moves(&moves);
+        let visits = do_moves(&moves, 2);
         assert_eq!(13, visits.len());
+    }
+
+    #[test]
+    fn test_day_b_input_1() {
+        let input = input();
+        let moves = parse(&input);
+
+        let visits = do_moves(&moves, 10);
+        assert_eq!(1, visits.len());
+    }
+
+    fn larger_input() -> String {
+        "R 5
+U 8
+L 8
+D 3
+R 17
+D 10
+L 25
+U 20"
+            .to_string()
+    }
+
+    #[test]
+    fn test_day_b_input_2() {
+        let input = larger_input();
+        let moves = parse(&input);
+
+        let visits = do_moves(&moves, 10);
+        assert_eq!(36, visits.len());
     }
 }

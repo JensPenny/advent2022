@@ -14,6 +14,7 @@ use crate::days::day6::day_6;
 use crate::days::day8::day_8_a;
 use crate::days::day8::day_8_b;
 use crate::days::day9::day_9_a;
+use crate::days::day9::day_9_b;
 
 pub mod tools;
 pub mod days;
@@ -40,6 +41,8 @@ fn day9() {
     let day = day_9_a(&input);
     println!("Day 9 a: {day}");
 
+    let day = day_9_b(&input);
+    println!("Day 9 b: {day}");
 }
 
 #[allow(dead_code)]
