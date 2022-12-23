@@ -41,7 +41,7 @@ pub fn day_10_b(input: &String) -> i32 {
     let mut last_command = commands.pop().expect("peut");
 
     let mut global_cycle = 1;
-    let mut next_command_cycle = 0;
+    let mut next_command_cycle;
 
     //Initialize end for next command
     if last_command == "noop" {
