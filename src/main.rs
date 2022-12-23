@@ -5,6 +5,8 @@ use days::day1;
 use days::day2;
 use days::day3::day_3_a;
 
+use crate::days::day10::day_10_a;
+use crate::days::day10::day_10_b;
 use crate::days::day3::day_3_b;
 use crate::days::day4::day_4_a;
 use crate::days::day4::day_4_b;
@@ -29,10 +31,21 @@ fn main() {
     //day6();
     //day7();
     //day8();
-    day9();
+    //day9();
+    day10();
 
     let duration = start.elapsed();
     println!("solved in: {:?}", duration);
+}
+
+#[allow(dead_code)]
+fn day10() {
+    let input = fs::read_to_string("res/day10").expect("could not read day10");
+    let day = day_10_a(&input);
+    println!("Day 10 a: {day}");
+
+    let day = day_10_b(&input);
+    println!("Day 10 b: {day}");
 }
 
 #[allow(dead_code)]
